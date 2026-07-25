@@ -3,6 +3,11 @@ package io.github.zphrio.adhan.cli.config;
 import io.github.zphrio.adhan.CalculationMethod;
 import io.github.zphrio.adhan.Madhab;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+
+import java.nio.file.Path;
+import java.nio.file.Files;
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -63,5 +68,21 @@ class ConfigTest {
                 () -> TimeFormat.fromKey("13h"));
         assertTrue(ex.getMessage().contains("timeformat"));
         assertTrue(ex.getMessage().contains("12h"));
+    }
+
+    @Test
+    void nanLatitudeThrows() {
+        InvalidConfigException ex = assertThrows(InvalidConfigException.class,
+                () -> new Config(Double.NaN, 46.6753, CalculationMethod.UMM_AL_QURA, Madhab.SHAFI, TimeFormat.TWELVE_HOUR));
+        assertTrue(ex.getMessage().contains("latitude"));
+    }
+
+    @Test
+    void nanLatitudeInConfigFileFailsToLoad(@TempDir Path tempDir) throws IOException {
+        Path file = tempDir.resolve("config");
+        Files.writeString(file, "latitude=NaN\nlongitude=46.7\nmethod=UMM_AL_QURA\nmadhab=SHAFI\n");
+        InvalidConfigException ex = assertThrows(InvalidConfigException.class,
+                () -> new ConfigStore(file).load());
+        assertTrue(ex.getMessage().contains("latitude"));
     }
 }
