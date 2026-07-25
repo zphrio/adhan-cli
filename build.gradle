@@ -1,0 +1,58 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.graalvm.buildtools.native' version '1.1.6'
+}
+
+group = 'io.github.zphrio'
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+application {
+    mainClass = 'io.github.zphrio.adhan.cli.AdhanCli'
+}
+
+run {
+    standardInput = System.in
+}
+
+dependencies {
+    implementation 'io.github.zphrio:adhan-java:1.0'
+    implementation 'info.picocli:picocli:4.7.7'
+    annotationProcessor 'info.picocli:picocli-codegen:4.7.7'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+compileJava {
+    options.compilerArgs += ["-Aproject=${project.group}/${project.name}"]
+}
+
+test {
+    useJUnitPlatform()
+}
+
+processResources {
+    filesMatching('version.txt') {
+        expand(version: project.version)
+    }
+}
+
+graalvmNative {
+    binaries {
+        main {
+            imageName = 'adhan'
+            resources.autodetect()
+        }
+    }
+}
