@@ -1,5 +1,6 @@
 package io.github.zphrio.adhan.cli;
 
+import io.github.zphrio.adhan.cli.commands.ConfigCommand;
 import io.github.zphrio.adhan.cli.commands.NextCommand;
 import io.github.zphrio.adhan.cli.commands.TodayCommand;
 import io.github.zphrio.adhan.cli.config.ConfigStore;
@@ -28,6 +29,7 @@ public class AdhanCli implements Runnable {
 
     public static CommandLine buildCommandLine(ConfigStore store, Clock clock, BufferedReader stdin) {
         return new CommandLine(new AdhanCli())
+                .addSubcommand("config", new ConfigCommand(store, stdin))
                 .addSubcommand("today", new TodayCommand(store, clock))
                 .addSubcommand("next", new NextCommand(store, clock))
                 .setExecutionExceptionHandler((ex, cmd, parseResult) -> {
