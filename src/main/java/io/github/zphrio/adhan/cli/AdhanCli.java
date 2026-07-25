@@ -1,9 +1,16 @@
 package io.github.zphrio.adhan.cli;
 
+import io.github.zphrio.adhan.cli.commands.NextCommand;
+import io.github.zphrio.adhan.cli.commands.TodayCommand;
+import io.github.zphrio.adhan.cli.config.ConfigStore;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Spec;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.time.Clock;
 
 @Command(name = "adhan",
         mixinStandardHelpOptions = true,
@@ -19,12 +26,22 @@ public class AdhanCli implements Runnable {
         spec.commandLine().usage(spec.commandLine().getOut());
     }
 
-    public static CommandLine buildCommandLine() {
-        return new CommandLine(new AdhanCli());
+    public static CommandLine buildCommandLine(ConfigStore store, Clock clock, BufferedReader stdin) {
+        return new CommandLine(new AdhanCli())
+                .addSubcommand("today", new TodayCommand(store, clock))
+                .addSubcommand("next", new NextCommand(store, clock))
+                .setExecutionExceptionHandler((ex, cmd, parseResult) -> {
+                    cmd.getErr().println("Error: " + ex.getMessage());
+                    return 1;
+                });
     }
 
     public static void main(String[] args) {
-        System.exit(buildCommandLine().execute(args));
+        CommandLine cmd = buildCommandLine(
+                new ConfigStore(ConfigStore.defaultFile()),
+                Clock.systemDefaultZone(),
+                new BufferedReader(new InputStreamReader(System.in)));
+        System.exit(cmd.execute(args));
     }
 
     static class VersionProvider implements CommandLine.IVersionProvider {
