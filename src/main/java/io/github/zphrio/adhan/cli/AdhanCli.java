@@ -15,7 +15,7 @@ import java.time.Clock;
 
 @Command(name = "adhan",
         mixinStandardHelpOptions = true,
-        versionProvider = AdhanCli.VersionProvider.class,
+        version = "adhan " + BuildInfo.VERSION,
         description = "Islamic prayer times for your terminal.")
 public class AdhanCli implements Runnable {
 
@@ -44,14 +44,5 @@ public class AdhanCli implements Runnable {
                 Clock.systemDefaultZone(),
                 new BufferedReader(new InputStreamReader(System.in)));
         System.exit(cmd.execute(args));
-    }
-
-    static class VersionProvider implements CommandLine.IVersionProvider {
-        @Override
-        public String[] getVersion() throws Exception {
-            try (var in = AdhanCli.class.getResourceAsStream("/version.txt")) {
-                return new String[]{"adhan " + new String(in.readAllBytes()).trim()};
-            }
-        }
     }
 }

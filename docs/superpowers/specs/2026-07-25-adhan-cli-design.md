@@ -176,7 +176,7 @@ JUnit 5. Tests run on the JVM; test-only dependencies (e.g. Jackson for parsing 
 - Gradle plugins: `java`, `application`, GraalVM Native Build Tools. Picocli's annotation processor generates the native-image reflection config.
 - Dev loop: `./gradlew run --args="next --remaining"` (JVM, fast iteration).
 - Native build: `./gradlew nativeCompile` → `build/native/nativeCompile/adhan`. Requires a local GraalVM JDK with `native-image`.
-- Version single-sourced in `gradle.properties`, starting at `0.1` (two-segment `x.x` style).
+- Version single-sourced in `gradle.properties`, starting at `0.1` (two-segment `x.x` style). The `generateVersionSource` task bakes it into a generated `BuildInfo.VERSION` constant, which `@Command(version = ...)` uses directly — no resource file, no runtime lookup. Keeping the version in `gradle.properties` (rather than `build.gradle`) preserves `-Pversion=` overrides for tag-driven releases.
 
 No CI in v1 — all verification is local (tests + JVM run + native binary smoke test).
 
