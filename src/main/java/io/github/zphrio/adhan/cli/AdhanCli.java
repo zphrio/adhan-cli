@@ -38,7 +38,7 @@ public class AdhanCli implements Runnable {
                 });
     }
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         CommandLine cmd = buildCommandLine(
                 new ConfigStore(ConfigStore.defaultFile()),
                 Clock.systemDefaultZone(),

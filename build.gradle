@@ -43,6 +43,8 @@ test {
 }
 
 processResources {
+    // Without this, a version bump leaves the previously expanded version.txt in place
+    inputs.property('version', project.version)
     filesMatching('version.txt') {
         expand(version: project.version)
     }

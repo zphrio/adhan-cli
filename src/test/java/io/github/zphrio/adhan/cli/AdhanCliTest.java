@@ -34,7 +34,7 @@ class AdhanCliTest {
         StringWriter out = new StringWriter();
         int exit = commandLine(out).execute("--version");
         assertEquals(0, exit);
-        assertEquals("adhan 0.1.0", out.toString().trim());
+        assertEquals("adhan 0.1", out.toString().trim());
     }
 
     @Test
