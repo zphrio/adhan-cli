@@ -4,18 +4,18 @@ import io.github.zphrio.adhan.cli.commands.ConfigCommand;
 import io.github.zphrio.adhan.cli.commands.NextCommand;
 import io.github.zphrio.adhan.cli.commands.TodayCommand;
 import io.github.zphrio.adhan.cli.config.ConfigStore;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.time.Clock;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Spec;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.time.Clock;
-
-@Command(name = "adhan",
+@Command(
+        name = "adhan",
         mixinStandardHelpOptions = true,
-        version = "adhan " + BuildInfo.VERSION,
+        version = "adhan " + AdhanCliVersion.VERSION,
         description = "Islamic prayer times for your terminal.")
 public class AdhanCli implements Runnable {
 

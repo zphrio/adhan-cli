@@ -5,7 +5,6 @@ import io.github.zphrio.adhan.Coordinates;
 import io.github.zphrio.adhan.PrayerTimes;
 import io.github.zphrio.adhan.cli.config.Config;
 import io.github.zphrio.adhan.data.DateComponents;
-
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
@@ -67,8 +66,7 @@ public final class PrayerSchedule {
         Coordinates coordinates = new Coordinates(config.latitude(), config.longitude());
         CalculationParameters parameters = config.method().getParameters();
         parameters.madhab = config.madhab();
-        DateComponents dateComponents =
-                new DateComponents(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
+        DateComponents dateComponents = new DateComponents(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
         return new PrayerTimes(coordinates, dateComponents, parameters);
     }
 

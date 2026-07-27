@@ -6,14 +6,13 @@ import io.github.zphrio.adhan.cli.core.DayTimes;
 import io.github.zphrio.adhan.cli.core.PrayerSchedule;
 import io.github.zphrio.adhan.cli.output.JsonFormatter;
 import io.github.zphrio.adhan.cli.output.TextFormatter;
+import java.time.Clock;
+import java.util.Optional;
+import java.util.concurrent.Callable;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Spec;
-
-import java.time.Clock;
-import java.util.Optional;
-import java.util.concurrent.Callable;
 
 @Command(name = "today", description = "Show today's prayer times.")
 public class TodayCommand implements Callable<Integer> {

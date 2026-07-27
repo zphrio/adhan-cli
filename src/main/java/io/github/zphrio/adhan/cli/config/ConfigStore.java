@@ -2,7 +2,6 @@ package io.github.zphrio.adhan.cli.config;
 
 import io.github.zphrio.adhan.CalculationMethod;
 import io.github.zphrio.adhan.Madhab;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.io.UncheckedIOException;
@@ -17,8 +16,7 @@ import java.util.stream.Collectors;
 
 public final class ConfigStore {
 
-    private static final List<String> REQUIRED_KEYS =
-            List.of("latitude", "longitude", "method", "madhab");
+    private static final List<String> REQUIRED_KEYS = List.of("latitude", "longitude", "method", "madhab");
 
     private final Path file;
 
@@ -28,9 +26,7 @@ public final class ConfigStore {
 
     public static Path defaultFile() {
         String xdg = System.getenv("XDG_CONFIG_HOME");
-        Path base = (xdg == null || xdg.isBlank())
-                ? Path.of(System.getProperty("user.home"), ".config")
-                : Path.of(xdg);
+        Path base = (xdg == null || xdg.isBlank()) ? Path.of(System.getProperty("user.home"), ".config") : Path.of(xdg);
         return base.resolve("adhan").resolve("config");
     }
 
@@ -59,11 +55,9 @@ public final class ConfigStore {
     }
 
     public void save(Config config) {
-        String content = "latitude=" + config.latitude() + "\n"
-                + "longitude=" + config.longitude() + "\n"
-                + "method=" + config.method().name() + "\n"
-                + "madhab=" + config.madhab().name() + "\n"
-                + "timeformat=" + config.timeFormat().key() + "\n";
+        String content = "latitude=" + config.latitude() + "\n" + "longitude=" + config.longitude() + "\n" + "method="
+                + config.method().name() + "\n" + "madhab=" + config.madhab().name() + "\n" + "timeformat="
+                + config.timeFormat().key() + "\n";
         try {
             Files.createDirectories(file.getParent());
             Path tmp = file.resolveSibling(file.getFileName() + ".tmp");

@@ -6,14 +6,13 @@ import io.github.zphrio.adhan.cli.core.NextPrayer;
 import io.github.zphrio.adhan.cli.core.PrayerSchedule;
 import io.github.zphrio.adhan.cli.output.JsonFormatter;
 import io.github.zphrio.adhan.cli.output.TextFormatter;
+import java.time.Clock;
+import java.util.Optional;
+import java.util.concurrent.Callable;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Spec;
-
-import java.time.Clock;
-import java.util.Optional;
-import java.util.concurrent.Callable;
 
 @Command(name = "next", description = "Show the next prayer.")
 public class NextCommand implements Callable<Integer> {

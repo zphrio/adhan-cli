@@ -3,7 +3,6 @@ package io.github.zphrio.adhan.cli.output;
 import io.github.zphrio.adhan.cli.config.TimeFormat;
 import io.github.zphrio.adhan.cli.core.DayTimes;
 import io.github.zphrio.adhan.cli.core.NextPrayer;
-
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;

@@ -6,16 +6,15 @@ import io.github.zphrio.adhan.cli.config.Config;
 import io.github.zphrio.adhan.cli.config.ConfigStore;
 import io.github.zphrio.adhan.cli.config.InvalidConfigException;
 import io.github.zphrio.adhan.cli.config.TimeFormat;
-import picocli.CommandLine.Command;
-import picocli.CommandLine.Model.CommandSpec;
-import picocli.CommandLine.Option;
-import picocli.CommandLine.Spec;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Optional;
 import java.util.concurrent.Callable;
+import picocli.CommandLine.Command;
+import picocli.CommandLine.Model.CommandSpec;
+import picocli.CommandLine.Option;
+import picocli.CommandLine.Spec;
 
 @Command(name = "config", description = "Configure adhan (interactive wizard).")
 public class ConfigCommand implements Callable<Integer> {
@@ -95,7 +94,7 @@ public class ConfigCommand implements Callable<Integer> {
                     double latitude = Double.parseDouble(parts[0].trim());
                     double longitude = Double.parseDouble(parts[1].trim());
                     if (latitude >= -90 && latitude <= 90 && longitude >= -180 && longitude <= 180) {
-                        return new double[]{latitude, longitude};
+                        return new double[] {latitude, longitude};
                     }
                 } catch (NumberFormatException ignored) {
                     // fall through to the hint below
@@ -110,7 +109,8 @@ public class ConfigCommand implements Callable<Integer> {
         for (int i = 0; i < methods.length; i++) {
             out.println("  " + (i + 1) + ") " + methods[i].name());
         }
-        String fallback = existing == null ? null : String.valueOf(existing.method().ordinal() + 1);
+        String fallback =
+                existing == null ? null : String.valueOf(existing.method().ordinal() + 1);
         while (true) {
             String answer = prompt(out, "Method", fallback);
             try {
@@ -153,6 +153,5 @@ public class ConfigCommand implements Callable<Integer> {
         }
     }
 
-    private static final class AbortedException extends RuntimeException {
-    }
+    private static final class AbortedException extends RuntimeException {}
 }

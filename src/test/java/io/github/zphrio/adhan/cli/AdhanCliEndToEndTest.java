@@ -1,5 +1,7 @@
 package io.github.zphrio.adhan.cli;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.zphrio.adhan.CalculationMethod;
@@ -7,10 +9,6 @@ import io.github.zphrio.adhan.Madhab;
 import io.github.zphrio.adhan.cli.config.Config;
 import io.github.zphrio.adhan.cli.config.ConfigStore;
 import io.github.zphrio.adhan.cli.config.TimeFormat;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-import picocli.CommandLine;
-
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.io.StringReader;
@@ -20,14 +18,15 @@ import java.nio.file.Path;
 import java.time.Clock;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import picocli.CommandLine;
 
 class AdhanCliEndToEndTest {
 
     private static final ZoneId ZONE = ZoneId.of("Asia/Riyadh");
-    private static final Clock CLOCK = Clock.fixed(
-            ZonedDateTime.of(2025, 1, 11, 10, 0, 0, 0, ZONE).toInstant(), ZONE);
+    private static final Clock CLOCK =
+            Clock.fixed(ZonedDateTime.of(2025, 1, 11, 10, 0, 0, 0, ZONE).toInstant(), ZONE);
 
     @TempDir
     Path tempDir;
@@ -50,8 +49,8 @@ class AdhanCliEndToEndTest {
 
     private ConfigStore configuredStore() {
         ConfigStore store = emptyStore();
-        store.save(new Config(24.71352778, 46.67519444,
-                CalculationMethod.UMM_AL_QURA, Madhab.SHAFI, TimeFormat.TWELVE_HOUR));
+        store.save(new Config(
+                24.71352778, 46.67519444, CalculationMethod.UMM_AL_QURA, Madhab.SHAFI, TimeFormat.TWELVE_HOUR));
         return store;
     }
 

@@ -1,72 +1,92 @@
 plugins {
-    id 'java'
-    id 'application'
-    id 'org.graalvm.buildtools.native' version '1.1.6'
+	id 'java'
+	id 'application'
+	id 'org.graalvm.buildtools.native' version '1.1.6'
+	id 'com.diffplug.spotless' version '8.8.0'
 }
 
 group = 'io.github.zphrio'
+version = 0.1
 
 repositories {
-    mavenCentral()
+	mavenCentral()
 }
 
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(25)
-    }
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(25)
+	}
 }
 
 application {
-    mainClass = 'io.github.zphrio.adhan.cli.AdhanCli'
+	mainClass = 'io.github.zphrio.adhan.cli.AdhanCli'
 }
 
 run {
-    standardInput = System.in
+	standardInput = System.in
 }
 
 dependencies {
-    implementation 'io.github.zphrio:adhan-java:1.0'
-    implementation 'info.picocli:picocli:4.7.7'
-    annotationProcessor 'info.picocli:picocli-codegen:4.7.7'
+	implementation 'io.github.zphrio:adhan-java:1.0'
+	implementation 'info.picocli:picocli:4.7.7'
+	annotationProcessor 'info.picocli:picocli-codegen:4.7.7'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
-    testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+	testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 compileJava {
-    options.compilerArgs += ["-Aproject=${project.group}/${project.name}"]
+	options.compilerArgs += [
+		"-Aproject=${project.group}/${project.name}"
+	]
 }
 
 test {
-    useJUnitPlatform()
+	useJUnitPlatform()
+}
+
+spotless {
+	java {
+		target 'src/**/*.java'
+		palantirJavaFormat()
+		removeUnusedImports()
+		trimTrailingWhitespace()
+		endWithNewline()
+	}
+	groovyGradle {
+		target '*.gradle'
+		greclipse()
+		trimTrailingWhitespace()
+		endWithNewline()
+	}
 }
 
 // Bakes the project version into a compile-time constant, so --version needs no runtime lookup.
 def generateVersionSource = tasks.register('generateVersionSource') {
-    def outputDir = layout.buildDirectory.dir('generated/sources/version/java/main')
-    // Without this, a version bump leaves the previously generated constant in place
-    inputs.property('version', project.version)
-    outputs.dir(outputDir)
-    doLast {
-        def packageDir = new File(outputDir.get().asFile, 'io/github/zphrio/adhan/cli')
-        packageDir.mkdirs()
-        new File(packageDir, 'BuildInfo.java').text = """package io.github.zphrio.adhan.cli;
-
-final class BuildInfo {
-    static final String VERSION = "${project.version}";
-}
+	def outputDir = layout.buildDirectory.dir('generated/sources/version/java/main')
+	// Without this, a version bump leaves the previously generated constant in place
+	inputs.property('version', project.version)
+	outputs.dir(outputDir)
+	doLast {
+		// Wipe first so a renamed class leaves no stale generated file behind
+		outputDir.get().asFile.deleteDir()
+		def packageDir = new File(outputDir.get().asFile, 'io/github/zphrio/adhan/cli')
+		packageDir.mkdirs()
+		new File(packageDir, 'AdhanCliVersion.java').text = """
+package io.github.zphrio.adhan.cli;
+final class AdhanCliVersion {static final String VERSION = "${project.version}";}
 """
-    }
+	}
 }
 
 sourceSets.main.java.srcDir generateVersionSource
 
 graalvmNative {
-    binaries {
-        main {
-            imageName = 'adhan'
-            resources.autodetect()
-        }
-    }
+	binaries {
+		main {
+			imageName = 'adhan'
+			resources.autodetect()
+		}
+	}
 }
