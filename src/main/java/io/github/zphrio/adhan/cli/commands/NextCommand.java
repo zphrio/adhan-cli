@@ -17,7 +17,9 @@ import picocli.CommandLine.Spec;
 @Command(name = "next", description = "Show the next prayer.")
 public class NextCommand implements Callable<Integer> {
 
-    @Option(names = "--remaining", description = "Also show remaining time until the next prayer.")
+    @Option(
+            names = {"-r", "--remaining"},
+            description = "Also show remaining time until the next prayer.")
     boolean remaining;
 
     @Option(names = "--json", description = "Output as JSON (always includes remaining_minutes).")

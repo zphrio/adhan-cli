@@ -19,7 +19,9 @@ import picocli.CommandLine.Spec;
 @Command(name = "config", description = "Configure adhan (interactive wizard).")
 public class ConfigCommand implements Callable<Integer> {
 
-    @Option(names = "--list", description = "Show current configuration.")
+    @Option(
+            names = {"-l", "--list"},
+            description = "Show current configuration.")
     boolean list;
 
     @Spec
